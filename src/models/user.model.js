@@ -98,6 +98,10 @@ const userSchema = mongoose.Schema(
         ticketNumber: {
           type: Number,
         },
+        canVisit: {
+          type: Boolean,
+          default: false,
+        },
       }],
       default: [],
     },

@@ -7,6 +7,7 @@ const borrowController = require('../../controllers/borrow.controller');
 router
     .route('/')
     .get(borrowController.getBorrows)
+    .post(borrowController.createNewBorrow)
 
 router
     .route('/:borrowId/:userId')

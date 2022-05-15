@@ -10,7 +10,11 @@ router
     .get(queueController.getQueues)
 
 router
-    .route('/:bookId/:userId')
-    .get(queueController.getQueue)
+    .route('/:bookId')
+    .delete(queueController.deleteQueues)
+
+router
+  .route('/canVisit/:bookId/:userId')
+  .get(queueController.updateVisit)
 
 module.exports = router;

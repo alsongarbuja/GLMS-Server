@@ -8,6 +8,11 @@ const createBorrow = catchAsync(async (req, res) => {
     res.status(httpStatus.CREATED).send(user);
 });
 
+const createNewBorrow = catchAsync(async (req, res) => {
+  const user = await borrowService.createNewBorrow(req)
+  res.status(httpStatus.CREATED).send(user)
+})
+
 const getBorrows = catchAsync(async (req, res) => {
     const borrows = await borrowService.getBorrows();
     res.status(200).send(borrows);
@@ -28,4 +33,5 @@ module.exports = {
     getBorrows,
     deleteBorrow,
     getBorrow,
+    createNewBorrow,
 }

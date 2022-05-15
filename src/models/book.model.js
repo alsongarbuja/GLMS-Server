@@ -39,6 +39,10 @@ const bookSchema = new mongoose.Schema({
               name: String,
               level: String,
               queue_ticket_number: Number,
+              canVisit: {
+                type: Boolean,
+                default: false,
+              },
           }
       ],
       default: [],
