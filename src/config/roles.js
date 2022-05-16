@@ -1,9 +1,9 @@
 const allRoles = {
-  user: [
+  USER: [
     'getUser', 'manageUser', 'addRequest',
     'getQueue', 'getBorrow', 'removeRequest', 'addQueue',
   ],
-  admin: [
+  SYSTEM_ADMIN: [
     'adminRequests',
     'addUser', 'getUser', 'manageUser', 'removeUser', 'getUsers',
     'manageBook', 'addBook', 'removeBook',
