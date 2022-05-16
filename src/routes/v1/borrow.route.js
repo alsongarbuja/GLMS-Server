@@ -1,21 +1,23 @@
 const express = require('express');
-const router = express.Router();
-const validate = require('../../middlewares/validate');
 const borrowValidation = require('../../validations/borrow.validation');
 const borrowController = require('../../controllers/borrow.controller');
+const validate = require('../../middlewares/validate');
+const auth = require('../../middlewares/auth');
+const router = express.Router();
 
 router
     .route('/')
-    .get(borrowController.getBorrows)
-    .post(borrowController.createNewBorrow)
+    .get(auth('getBorrows'), borrowController.getBorrows)
+    .post(auth('addBorrow'), borrowController.createNewBorrow)
 
 router
     .route('/:borrowId/:userId')
-    .get(validate(borrowValidation.singleBorrow), borrowController.getBorrow)
-    .delete(validate(borrowValidation.singleBorrow), borrowController.deleteBorrow)
+    .get(auth('getBorrow'), validate(borrowValidation.singleBorrow), borrowController.getBorrow)
+    .delete(auth('removeBorrow'), validate(borrowValidation.singleBorrow), borrowController.deleteBorrow)
+    // .path(auth('manageBorrow'), validation(), borrowController.extendBorrow),
 
 router
     .route('/:requestId')
-    .post(validate(borrowValidation.createBorrow), borrowController.createBorrow)
+    .post(auth('addBorrow'), validate(borrowValidation.createBorrow), borrowController.createBorrow)
 
 module.exports = router;

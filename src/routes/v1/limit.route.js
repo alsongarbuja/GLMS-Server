@@ -2,16 +2,17 @@ const express = require('express');
 const limitController = require('../../controllers/limit.controller');
 const limitValidation = require('../../validations/limit.validation');
 const validate = require('../../middlewares/validate');
+const auth = require('../../middlewares/auth');
 const router = express.Router();
 
-router 
+router
     .route('/')
-    .post(validate(limitValidation.createLimit), limitController.createLimit)
-    .get(limitController.getLimits)
+    .post(auth('manageLimits'), validate(limitValidation.createLimit), limitController.createLimit)
+    .get(auth('manageLimits'), limitController.getLimits)
 router
     .route('/:limitId')
-    .get(validate(limitValidation.singleLimit), limitController.getLimit)
-    .patch(validate(limitValidation.updateLimit), limitController.updateLimit)
-    .delete(validate(limitValidation.singleLimit), limitController.deleteLimit)
+    .get(auth('manageLimits'), validate(limitValidation.singleLimit), limitController.getLimit)
+    .patch(auth('manageLimits'), validate(limitValidation.updateLimit), limitController.updateLimit)
+    .delete(auth('manageLimits'), validate(limitValidation.singleLimit), limitController.deleteLimit)
 
 module.exports = router;

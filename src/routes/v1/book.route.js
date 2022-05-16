@@ -2,16 +2,17 @@ const express = require('express');
 const bookController = require('../../controllers/book.controller');
 const bookValidation = require('../../validations/book.validation');
 const validate = require('../../middlewares/validate');
+const auth = require('../../middlewares/auth');
 const router = express.Router();
 
-router 
+router
     .route('/')
-    .post(validate(bookValidation.createBook), bookController.createBook)
+    .post(auth('addBook'), validate(bookValidation.createBook), bookController.createBook)
     .get(bookController.getBooks)
 router
     .route('/:bookId')
     .get(validate(bookValidation.singleBook), bookController.getBook)
-    .patch(validate(bookValidation.updateBook), bookController.updateBook)
-    .delete(validate(bookValidation.singleBook), bookController.deleteBook)
+    .patch(auth('manageBook'), validate(bookValidation.updateBook), bookController.updateBook)
+    .delete(auth('removeBook'), validate(bookValidation.singleBook), bookController.deleteBook)
 
 module.exports = router;

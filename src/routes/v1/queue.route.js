@@ -1,20 +1,21 @@
 const express = require('express');
-const router = express.Router();
 // const validate = require('../../middlewares/validate');
 // const adminValidation = require('../../validations/admin.validation');
 const queueController = require('../../controllers/queue.controller');
+const auth = require('../../middlewares/auth')
+const router = express.Router();
 
 router
     .route('/')
-    .post(queueController.addQueue)
-    .get(queueController.getQueues)
+    .post(auth('addQueue'), queueController.addQueue)
+    .get(auth('getQueues'), queueController.getQueues)
 
 router
     .route('/:bookId')
-    .delete(queueController.deleteQueues)
+    .delete(auth('removeQueue'), queueController.deleteQueues)
 
 router
   .route('/canVisit/:bookId/:userId')
-  .get(queueController.updateVisit)
+  .get(auth('manageQueues'), queueController.updateVisit)
 
 module.exports = router;

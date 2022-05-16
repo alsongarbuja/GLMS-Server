@@ -8,18 +8,18 @@ const router = express.Router();
 
 router
   .route('/')
-  .post(validate(userValidation.createUser), userController.createUser)
-  .get(validate(userValidation.getUsers), userController.getUsers);
+  .post(auth('addUser'), validate(userValidation.createUser), userController.createUser)
+  .get(auth('getUsers'), validate(userValidation.getUsers), userController.getUsers);
 
 router
   .route('/mybooks/:userId')
-  .get(validate(userValidation.getUser), userController.getMyBooks)
+  .get(auth('getBorrow'), validate(userValidation.getUser), userController.getMyBooks)
 
 router
   .route('/:userId')
-  .get(validate(userValidation.getUser), userController.getUser)
-  .patch(validate(userValidation.updateUser), userController.updateUser)
-  .delete(validate(userValidation.deleteUser), userController.deleteUser);
+  .get(auth('getUser'), validate(userValidation.getUser), userController.getUser)
+  .patch(auth('manageUser'), validate(userValidation.updateUser), userController.updateUser)
+  .delete(auth('removeUser'), validate(userValidation.deleteUser), userController.deleteUser);
 
 module.exports = router;
 
