@@ -9,6 +9,7 @@ const allRoles = {
     'manageBook', 'addBook', 'removeBook',
     'manageLimits',
     'manageCategories',
+    'manageFines',
     'addRequest', 'removeRequest', 'getRequets', 'manageRequest', 'getRequest',
     'getQueue', 'addQueue', 'removeQueue', 'getQueues', 'manageQueues',
     'getBorrow', 'getBorrows', 'manageBorrow', 'addBorrow', 'removeBorrow'
