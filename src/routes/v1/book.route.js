@@ -14,5 +14,8 @@ router
     .get(validate(bookValidation.singleBook), bookController.getBook)
     .patch(auth('manageBook'), validate(bookValidation.updateBook), bookController.updateBook)
     .delete(auth('removeBook'), validate(bookValidation.singleBook), bookController.deleteBook)
+router
+  .route('/check/:bookId/:userId')
+  .get(auth(), bookController.checkBook)
 
 module.exports = router;
