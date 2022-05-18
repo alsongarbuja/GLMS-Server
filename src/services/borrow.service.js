@@ -1,7 +1,6 @@
 const httpStatus = require('http-status');
-const { User, Request, Book } = require('../models');
 const ApiError = require('../utils/ApiError');
-const { createRequest } = require('./request.service');
+const { User, Request, Book, Limit, Fine } = require('../models');
 
 const getBorrowbyId = async (params) => {
     const { userId, borrowId } = params;
@@ -25,8 +24,20 @@ const createNewBorrow = async (borrowRequest) => {
     if(!user){
       throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
     }
-    // TO DO : Check for Limits
-    if(user.borrowed_books.length >= 6)
+
+    const userBorrows = await user.borrowed_books.filter(bb => bb.bookType===body.bookType)
+    let level = 'Bachelors'
+    if(user.semester==='Masters')
+      level = 'Masters'
+
+    const limit = await Limit.find({ level })
+
+    if(!limit){
+      throw new ApiError(httpStatus.NOT_FOUND, 'Limit not found')
+    }
+    const checkLimit = limit[0].sub_quantity.filter(sq => sq.type===body.bookType)[0]
+
+    if(userBorrows.length >= checkLimit.quantity)
     {
         throw new ApiError(httpStatus.BAD_REQUEST, 'User limit crossed');
     }
@@ -37,7 +48,7 @@ const createNewBorrow = async (borrowRequest) => {
         authorName: body.authorName,
         uniqueId: body.uniqueId,
         issuedDate: new Date(),
-        dueDate: new Date().setDate(new Date().getDate() + 30),
+        dueDate: new Date().setDate(new Date().getDate() + 29),
     }
     user.borrowed_books = [...user.borrowed_books, borrow];
     user.save();
@@ -59,8 +70,20 @@ const createBorrow = async (borrowRequest) => {
     if(!user){
       throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
     }
-    // TODO : Check for Limits
-    if(user.borrowed_books.length >= 6)
+
+    const userBorrows = await user.borrowed_books.filter(bb => bb.bookType===body.bookType)
+    let level = 'Bachelors'
+    if(user.semester==='Masters')
+      level = 'Masters'
+
+    const limit = await Limit.find({ level })
+
+    if(!limit){
+      throw new ApiError(httpStatus.NOT_FOUND, 'Limit not found')
+    }
+    const checkLimit = limit[0].sub_quantity.filter(sq => sq.type===body.bookType)[0]
+
+    if(userBorrows.length >= checkLimit.quantity)
     {
         throw new ApiError(httpStatus.BAD_REQUEST, 'User limit crossed');
     }
@@ -71,7 +94,7 @@ const createBorrow = async (borrowRequest) => {
         authorName: body.authorName,
         uniqueId: body.uniqueId,
         issuedDate: new Date(),
-        dueDate: new Date().setDate(new Date().getDate() + 30),
+        dueDate: new Date().setDate(new Date().getDate() + 29),
     }
     user.borrowed_books = [...user.borrowed_books, borrow];
     user.save();
@@ -179,11 +202,20 @@ const deleteBorrow = async (params) => {
        throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
    }
    await getBorrowbyId(params)
-   const bookId = await user.borrowed_books.filter(bb => bb._id==borrowId)[0].bookId
+   const borrowedBook = await user.borrowed_books.filter(bb => bb._id==borrowId)[0]
    user.borrowed_books = await user.borrowed_books.filter(borrowedBook => borrowedBook._id != borrowId)
+
+   const dateToday = new Date()
+   const days = dateToday.getTime()-borrowedBook.dueDate.getTime()/(1000*3600*24)
+
+   const fine = await Fine.find({})
+
+   if(days>0){
+     user.totalFine += fine[0].fine*Math.floor(Math.abs(days))
+   }
    await user.save();
 
-   await queueHandler(bookId, -1)
+   await queueHandler(borrowedBook.bookId, -1)
 }
 
 module.exports = {
