@@ -206,7 +206,7 @@ const deleteBorrow = async (params) => {
    user.borrowed_books = await user.borrowed_books.filter(borrowedBook => borrowedBook._id != borrowId)
 
    const dateToday = new Date()
-   const days = dateToday.getTime()-borrowedBook.dueDate.getTime()/(1000*3600*24)
+   const days = (dateToday.getTime()-borrowedBook.dueDate.getTime())/(1000*3600*24)
 
    const fine = await Fine.find({})
 
