@@ -28,10 +28,16 @@ const getBorrow = catchAsync(async (req, res) => {
     res.status(httpStatus.OK).send(borrow);
 })
 
+const extendBorrow = catchAsync(async (req, res) => {
+  await borrowService.extendBorrow(req.params)
+  res.status(httpStatus.OK).send({ message: 'Book extended' });
+})
+
 module.exports = {
     createBorrow,
     getBorrows,
     deleteBorrow,
     getBorrow,
     createNewBorrow,
+    extendBorrow,
 }

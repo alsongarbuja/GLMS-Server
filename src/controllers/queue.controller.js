@@ -27,11 +27,10 @@ const deleteQueues = catchAsync(async (req, res) => {
 
   book.in_queue.forEach(async (iq) => {
     const user = await User.findById(iq.userId)
-    if(!user){
-      throw new ApiError(httpStatus.NOT_FOUND, 'User not found')
+    if(user){
+      user.in_queue = []
+      await user.save();
     }
-    user.in_queue = []
-    await user.save();
   })
 
   book.in_queue = [];

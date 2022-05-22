@@ -205,10 +205,15 @@ const deleteBorrow = async (params) => {
    const borrowedBook = await user.borrowed_books.filter(bb => bb._id==borrowId)[0]
    user.borrowed_books = await user.borrowed_books.filter(borrowedBook => borrowedBook._id != borrowId)
 
-   const dateToday = new Date()
-   const days = (dateToday.getTime()-borrowedBook.dueDate.getTime())/(1000*3600*24)
-
    const fine = await Fine.find({})
+
+   let dateToday = new Date()
+
+   if(!fine[0].isActive){
+     dateToday = fine[0].turnedOffDate;
+   }
+
+   const days = (dateToday.getTime()-borrowedBook.dueDate.getTime())/(1000*3600*24)
 
    if(days>0){
      user.totalFine += fine[0].fine*Math.floor(Math.abs(days))
@@ -218,10 +223,29 @@ const deleteBorrow = async (params) => {
    await queueHandler(borrowedBook.bookId, -1)
 }
 
+const extendBorrow = async (params) => {
+  const { userId, borrowId } = params
+  const user = await User.findById(userId)
+
+  if(!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'User not found')
+  }
+
+  user.borrowed_books = await user.borrowed_books.filter(borrowedBook => {
+    if(borrowedBook._id == borrowId){
+      borrowedBook.dueDate = new Date().setDate(new Date().getDate() + 29)
+    }
+    return borrowedBook;
+  })
+
+  await user.save();
+}
+
 module.exports = {
     getBorrowbyId,
     createBorrow,
     getBorrows,
     deleteBorrow,
     createNewBorrow,
+    extendBorrow,
 }

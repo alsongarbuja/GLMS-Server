@@ -39,7 +39,18 @@ const removeFine = catchAsync(async (req, res) => {
     throw new ApiError(httpStatus.NOT_FOUND, 'Fine not found');
   }
   await fine.remove()
-  res.status(httpStatus.OK).send({ message: 'fien deleted' })
+  res.status(httpStatus.OK).send({ message: 'fine deleted' })
+})
+
+const toggleFine = catchAsync(async (req, res) => {
+  const fine = await Fine.find({})
+
+  fine[0].isActive = req.body.isActive
+  if(!req.body.isActive){
+    fine[0].turnedOffDate = new Date()
+  }
+  await fine[0].save();
+  res.status(httpStatus.OK).send({ message: 'fine toggled' })
 })
 
 module.exports = {
@@ -48,4 +59,5 @@ module.exports = {
   getFine,
   removeFine,
   updateFine,
+  toggleFine,
 }

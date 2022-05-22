@@ -51,6 +51,54 @@ const getMyBooks = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).send(books)
 })
 
+const updateUserSem = catchAsync(async (req, res) => {
+  const users = await User.find({})
+
+  users.forEach(async user => {
+    if(user.semester){
+      if(user.semester==='8th Semester'){
+        const request = await Request.find({
+          user: {
+            userId: user._id.toString(),
+            name: user.name,
+            level: user.semester,
+          }
+        })
+
+        request.forEach(async r => await r.remove())
+
+        user.remove()
+      }else{
+        user.semester = getNextSem(user.semester)
+        user.save()
+      }
+    }
+  })
+
+  res.status(httpStatus.OK).send({ message: 'Semester updated' })
+})
+
+const getNextSem = (sem) => {
+  switch (sem) {
+    case '1st Semester':
+      return '2nd Semester'
+    case '2nd Semester':
+      return '3rd Semester'
+    case '3rd Semester':
+      return '4th Semester'
+    case '4th Semester':
+      return '5th Semester'
+    case '5th Semester':
+      return '6th Semester'
+    case '6th Semester':
+      return '7th Semester'
+    case '7th Semester':
+      return '8th Semester'
+    default:
+      return 'Masters';
+  }
+}
+
 module.exports = {
   createUser,
   getUsers,
@@ -58,4 +106,5 @@ module.exports = {
   updateUser,
   deleteUser,
   getMyBooks,
+  updateUserSem,
 };

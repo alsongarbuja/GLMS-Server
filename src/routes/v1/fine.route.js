@@ -12,6 +12,10 @@ router
   .post(auth('manageFines'), validate(fineValidation.createFine), fineController.createFine)
 
 router
+  .route('/toggle-fine')
+  .patch(auth('manageFines'), fineController.toggleFine)
+
+router
   .route('/:fineId')
   .get(auth('manageFines'), validate(fineValidation.singleFine), fineController.getFine)
   .patch(auth('manageFines'), validate(fineValidation.updateFine), fineController.updateFine)

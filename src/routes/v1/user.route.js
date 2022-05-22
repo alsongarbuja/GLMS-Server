@@ -12,6 +12,10 @@ router
   .get(auth('getUsers'), validate(userValidation.getUsers), userController.getUsers);
 
 router
+  .route('/update-semester')
+  .get(auth('manageUser'), userController.updateUserSem)
+
+router
   .route('/mybooks/:userId')
   .get(auth('getBorrow'), validate(userValidation.getUser), userController.getMyBooks)
 

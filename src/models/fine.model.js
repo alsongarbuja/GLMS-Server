@@ -5,6 +5,14 @@ const fineSchema = mongoose.Schema({
     type: Number,
     required: true,
   },
+  isActive: {
+    type: Boolean,
+    default: false,
+  },
+  turnedOffDate: {
+    type: Date,
+    default: new Date(),
+  },
 }, {
   timestamps: true,
 })

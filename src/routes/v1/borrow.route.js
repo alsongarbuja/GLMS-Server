@@ -14,7 +14,7 @@ router
     .route('/:borrowId/:userId')
     .get(auth('getBorrow'), validate(borrowValidation.singleBorrow), borrowController.getBorrow)
     .delete(auth('removeBorrow'), validate(borrowValidation.singleBorrow), borrowController.deleteBorrow)
-    // .path(auth('manageBorrow'), validation(), borrowController.extendBorrow),
+    .post(auth('manageBorrow'), borrowController.extendBorrow),
 
 router
     .route('/:requestId')
