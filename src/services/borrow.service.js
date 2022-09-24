@@ -1,6 +1,7 @@
 const httpStatus = require('http-status');
 const ApiError = require('../utils/ApiError');
 const { User, Request, Book, Limit, Fine } = require('../models');
+const { sendMail } = require('../controllers/mail.controller');
 
 const getBorrowbyId = async (params) => {
     const { userId, borrowId } = params;
@@ -122,15 +123,31 @@ const queueHandler = async (bookId, type, isFromQueue=false, ticketNumber=1) => 
         inQueueUser.in_queue = await inQueueUser.in_queue.filter(iqq => !((iqq.bookId==bookId)&&iqq.ticketNumber===ticketNumber))
       }
       if(remainingBook>=(i+1)){
+        let borrowedBook = '';
+        let canVisit = false;
+
         inQueueUser.in_queue = await inQueueUser.in_queue.map(iqq => {
           if(iqq.bookId==bookId){
+            borrowedBook = iqq.bookName;
             iqq.canVisit = true;
+            canVisit = true;
             if(isFromQueue&&iqq.ticketNumber!==-1&&ticketNumber<iqq.ticketNumber){
                 iqq.ticketNumber -= 1;
             }
           }
           return iqq;
         })
+
+        if(canVisit){
+          const message = `
+            Hello ${inQueueUser.name},
+
+            The book ${borrowedBook} you had in queue is now available in library. Please visit the library to borrow the book.
+            Please visit soon or else someone will get the chance to borrow the book.
+          `;
+
+          sendMail(inQueueUser.email, 'Book in queue now available in library', message);
+        }
       }else{
         inQueueUser.in_queue = await inQueueUser.in_queue.map(iqq => {
           if(iqq.bookId==bookId){
