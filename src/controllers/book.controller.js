@@ -74,11 +74,7 @@ const checkBook = catchAsync(async (req, res) => {
     }
   }
 
-  let level = 'Bachelors'
-  if(user.semester==='Masters')
-    level = 'Masters'
-
-  const limit = await Limit.find({ level })
+  const limit = await Limit.find({ level: user.level })
 
   if(!limit){
     throw new ApiError(httpStatus.NOT_FOUND, 'Limit not found')
