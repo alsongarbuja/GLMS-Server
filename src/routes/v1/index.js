@@ -9,7 +9,7 @@ const borrowRoute = require('./borrow.route');
 const adminRoute = require('./admin.route');
 const queueRoute = require('./queue.route');
 const fineRoute = require('./fine.route');
-const mailRoute = require('./mail.route');
+const seedRoute = require('./seed.route');
 
 const docsRoute = require('./docs.route');
 const config = require('../../config/config');
@@ -58,9 +58,9 @@ const defaultRoutes = [
     route: fineRoute,
   },
   {
-    path: '/mail',
-    route: mailRoute,
-  },
+    path: '/seeds',
+    route: seedRoute,
+  }
 ];
 
 const devRoutes = [

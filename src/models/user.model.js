@@ -39,6 +39,11 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    level: {
+      type: String,
+      required: true,
+      enum: ['Bachelor', 'Master'],
+    },
     batch: {
       type: String,
       required: true,

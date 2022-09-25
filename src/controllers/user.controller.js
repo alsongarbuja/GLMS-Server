@@ -51,12 +51,22 @@ const getMyBooks = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).send(books)
 })
 
+const getFine = catchAsync(async (req, res) => {
+  const user = await User.findById(req.params.userId)
+
+  if(!user){
+    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+  }
+
+  res.status(httpStatus.OK).send({fine: user.fine})
+})
+
 const updateUserSem = catchAsync(async (req, res) => {
   const users = await User.find({})
 
   users.forEach(async user => {
     if(user.semester){
-      if(user.semester==='8th Semester'){
+      if(user.semester==='8th Semester'||user.semester==='2nd Year'){
         const request = await Request.find({
           user: {
             userId: user._id.toString(),
@@ -94,8 +104,10 @@ const getNextSem = (sem) => {
       return '7th Semester'
     case '7th Semester':
       return '8th Semester'
+    case '1st Year':
+      return '2nd Year'
     default:
-      return 'Masters';
+      return 'Finish';
   }
 }
 
@@ -107,4 +119,5 @@ module.exports = {
   deleteUser,
   getMyBooks,
   updateUserSem,
+  getFine,
 };

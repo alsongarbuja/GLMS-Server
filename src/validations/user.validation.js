@@ -7,6 +7,7 @@ const createUser = {
     password: Joi.string().required().custom(password),
     name: Joi.string().required(),
     semester: Joi.string().required(),
+    level: Joi.string().required().valid('Bachelor', 'Master'),
     regNo: Joi.string().optional(),
     phone: Joi.string().optional(),
     batch: Joi.string().optional(),
@@ -41,6 +42,7 @@ const updateUser = {
       name: Joi.string().optional(),
       phone: Joi.string().optional(),
       semester: Joi.string().optional(),
+      level: Joi.string().optional().valid('Bachelor', 'Master'),
       borrowed_books: Joi.array().optional(),
       totalFine: Joi.number().optional(),
     })
