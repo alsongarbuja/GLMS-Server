@@ -3,6 +3,7 @@ const { objectId } = require('./custom.validation');
 
 const categoryObject = {
     name: Joi.string().required(),
+    level: Joi.string().required().valid('Bachelor', 'Master'),
 }
 
 const createCategory = {
