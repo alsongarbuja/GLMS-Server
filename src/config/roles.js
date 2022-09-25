@@ -2,9 +2,10 @@ const allRoles = {
   USER: [
     'getUser', 'manageUser', 'addRequest',
     'getQueue', 'getBorrow', 'removeRequest', 'addQueue',
+    'getFine',
   ],
   SYSTEM_ADMIN: [
-    'adminRequests',
+    'adminRequests', 'canSeed',
     'addUser', 'getUser', 'manageUser', 'removeUser', 'getUsers',
     'manageBook', 'addBook', 'removeBook',
     'manageLimits',
