@@ -8,7 +8,7 @@ const categorySchema = new mongoose.Schema({
     level:{
       type:String,
       required:true,
-      enum: ['Bachelor','Master'],
+      enum: ['Bachelors','Masters'],
     },
 },
 {
