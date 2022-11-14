@@ -11,6 +11,7 @@ const register = {
     regNo: Joi.string().required(),
     faculty: Joi.valid('software', 'computer').required(),
     phone: Joi.string().required(),
+    level: Joi.string().required().valid('Bachelors', 'Masters'),
   }),
 };
 
