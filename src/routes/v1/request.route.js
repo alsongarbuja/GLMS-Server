@@ -7,12 +7,12 @@ const router = express.Router();
 
 router
     .route('/')
-    .post(auth('addRequest'), validate(requestValidation.createRequest), requestController.createRequest)
+    .post(auth('manageRequests'), validate(requestValidation.createRequest), requestController.createRequest)
     .get(auth('getRequets'), requestController.getRequests)
 router
     .route('/:requestId')
     .get(auth('getRequest'), validate(requestValidation.singleRequest), requestController.getRequest)
-    .patch(auth('manageRequest'), validate(requestValidation.updateRequest), requestController.updateRequest)
-    .delete(auth('removeRequest'), validate(requestValidation.singleRequest), requestController.deleteRequest)
+    .patch(auth('manageRequests'), validate(requestValidation.updateRequest), requestController.updateRequest)
+    .delete(auth('manageRequests'), validate(requestValidation.singleRequest), requestController.deleteRequest)
 
 module.exports = router;
