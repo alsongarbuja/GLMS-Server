@@ -2,14 +2,13 @@ const express = require('express');
 const authRoute = require('./auth.route');
 const userRoute = require('./user.route');
 const bookRoute = require('./book.route');
-const categoryRoute = require('./category.route');
-const limitRoute = require('./limit.route');
+const semesterRoute = require('./semester.route');
 const requestRoute = require('./request.route');
 const borrowRoute = require('./borrow.route');
 const adminRoute = require('./admin.route');
 const queueRoute = require('./queue.route');
-const fineRoute = require('./fine.route');
 const seedRoute = require('./seed.route');
+const levelRoute = require('./level.route');
 
 const docsRoute = require('./docs.route');
 const config = require('../../config/config');
@@ -30,15 +29,11 @@ const defaultRoutes = [
     route: bookRoute,
   },
   {
-    path: '/category',
-    route: categoryRoute,
+    path: '/semesters',
+    route: semesterRoute,
   },
   {
-    path: '/limit',
-    route: limitRoute,
-  },
-  {
-    path: '/request',
+    path: '/requests',
     route: requestRoute,
   },
   {
@@ -54,8 +49,8 @@ const defaultRoutes = [
     route: queueRoute,
   },
   {
-    path: '/fine',
-    route: fineRoute,
+    path: '/levels',
+    route: levelRoute,
   },
   {
     path: '/seeds',
