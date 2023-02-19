@@ -1,5 +1,5 @@
 const Joi = require('joi');
-const { password } = require('./custom.validation');
+const { password, objectId } = require('./custom.validation');
 
 const register = {
   body: Joi.object().keys({
@@ -7,11 +7,20 @@ const register = {
     password: Joi.string().required().custom(password),
     name: Joi.string().required(),
     batch: Joi.string().required(),
-    semester: Joi.string().required(),
+    semester: Joi.string().required().custom(objectId),
     regNo: Joi.string().required(),
     faculty: Joi.valid('software', 'computer').required(),
     phone: Joi.string().required(),
-    level: Joi.string().required().valid('Bachelors', 'Masters'),
+  }),
+};
+
+const registerAdmin = {
+  body: Joi.object().keys({
+    email: Joi.string().required().email(),
+    password: Joi.string().required().custom(password),
+    name: Joi.string().required(),
+    phone: Joi.string().required(),
+    role: Joi.string().required().valid('SYSTEM_ADMIN', 'SUPER_ADMIN'),
   }),
 };
 
@@ -57,6 +66,7 @@ const verifyEmail = {
 
 module.exports = {
   register,
+  registerAdmin,
   login,
   logout,
   refreshTokens,

@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const { toJSON, paginate } = require('./plugins');
-const { roles } = require('../config/roles');
+// const { roles } = require('../config/roles');
 
 const userSchema = mongoose.Schema(
   {
@@ -36,14 +36,15 @@ const userSchema = mongoose.Schema(
       private: true, // used by the toJSON plugin
     },
     semester: {
-      type: String,
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: 'Semester',
       required: true,
     },
-    level: {
-      type: String,
-      required: true,
-      enum: ['Bachelors', 'Masters'],
-    },
+    // level: {
+    //   type: String,
+    //   required: true,
+    //   enum: ['Bachelors', 'Masters'],
+    // },
     batch: {
       type: String,
       required: true,
@@ -59,57 +60,57 @@ const userSchema = mongoose.Schema(
     phone: {
       type: String,
     },
-    borrowed_books: {
-      type:[{
-        bookId: {
-          type: String,
-          required: true,
-        },
-        bookName: {
-          type: String,
-          required: true,
-        },
-        authorName: {
-          type: String,
-          required: true,
-        },
-        bookType: {
-          type: String,
-          enum: ['text-book', 'reference', 'others'],
-        },
-        uniqueId: {
-          type: String,
-          required: true,
-        },
-        issuedDate: Date,
-        dueDate: Date,
-        fineAmount: {
-          type: Number,
-          default: 0,
-        },
-      }],
-      default: [],
-    },
-    in_queue: {
-      type: [{
-        bookId: {
-          type: String,
-          required: true,
-        },
-        bookName: {
-          type: String,
-          required: true,
-        },
-        ticketNumber: {
-          type: Number,
-        },
-        canVisit: {
-          type: Boolean,
-          default: false,
-        },
-      }],
-      default: [],
-    },
+    // borrowed_books: {
+    //   type:[{
+    //     bookId: {
+    //       type: String,
+    //       required: true,
+    //     },
+    //     bookName: {
+    //       type: String,
+    //       required: true,
+    //     },
+    //     authorName: {
+    //       type: String,
+    //       required: true,
+    //     },
+    //     bookType: {
+    //       type: String,
+    //       enum: ['text-book', 'reference', 'others'],
+    //     },
+    //     uniqueId: {
+    //       type: String,
+    //       required: true,
+    //     },
+    //     issuedDate: Date,
+    //     dueDate: Date,
+    //     fineAmount: {
+    //       type: Number,
+    //       default: 0,
+    //     },
+    //   }],
+    //   default: [],
+    // },
+    // in_queue: {
+    //   type: [{
+    //     bookId: {
+    //       type: String,
+    //       required: true,
+    //     },
+    //     bookName: {
+    //       type: String,
+    //       required: true,
+    //     },
+    //     ticketNumber: {
+    //       type: Number,
+    //     },
+    //     canVisit: {
+    //       type: Boolean,
+    //       default: false,
+    //     },
+    //   }],
+    //   default: [],
+    // },
     totalFine: {
       type: Number,
       default: 0,
