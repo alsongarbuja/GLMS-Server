@@ -3,7 +3,7 @@ const { Book } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 const getBookbyId = async (id) => {
-    return Book.findById(id);
+    return Book.findById(id).populate('semester');
 }
 const createBook = async (bookBody) => {
     return Book.create(bookBody);

@@ -12,7 +12,7 @@ const bookObject = {
     year: Joi.number().required(),
     secondary_title: Joi.string().optional(),
     book_copies: Joi.array().required(),
-    category: Joi.string().optional(),
+    semester: Joi.string().optional(),
     type: Joi.string().optional().valid('reference','text-book','others'),
 }
 
@@ -42,8 +42,8 @@ const updateBook = {
       year: Joi.number().optional(),
       secondary_title: Joi.string().optional(),
       book_copies: Joi.array().optional(),
-      category: Joi.string().optional(),
-      type: Joi.string().optional().valid('reference','text-book'),
+      semester: Joi.string().optional(),
+      type: Joi.string().optional().valid('reference','text-book', 'others'),
     })
     .min(1),
 };

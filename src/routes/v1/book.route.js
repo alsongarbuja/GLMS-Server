@@ -7,13 +7,13 @@ const router = express.Router();
 
 router
     .route('/')
-    .post(auth('addBook'), validate(bookValidation.createBook), bookController.createBook)
+    .post(auth('manageBooks'), validate(bookValidation.createBook), bookController.createBook)
     .get(bookController.getBooks)
 router
     .route('/:bookId')
     .get(validate(bookValidation.singleBook), bookController.getBook)
-    .patch(auth('manageBook'), validate(bookValidation.updateBook), bookController.updateBook)
-    .delete(auth('removeBook'), validate(bookValidation.singleBook), bookController.deleteBook)
+    .patch(auth('manageBooks'), validate(bookValidation.updateBook), bookController.updateBook)
+    .delete(auth('manageBooks'), validate(bookValidation.singleBook), bookController.deleteBook)
 router
   .route('/check/:bookId/:userId')
   .get(auth(), bookController.checkBook)

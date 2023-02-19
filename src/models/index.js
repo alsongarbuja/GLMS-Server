@@ -1,8 +1,8 @@
 module.exports.Token = require('./token.model');
 module.exports.User = require('./user.model');
-// export * from './user'
 module.exports.Book = require('./book.model');
-module.exports.Category = require('./category.model');
-module.exports.Limit = require('./limit.model');
+module.exports.Semester = require('./semester.model');
 module.exports.Request = require('./request.model');
-module.exports.Fine = require('./fine.model');
+module.exports.Level = require('./level.model');
+module.exports.Borrow = require('./borrow.model');
+module.exports.Queue = require('./queue.model');
