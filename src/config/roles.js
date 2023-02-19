@@ -5,15 +5,9 @@ const allRoles = {
     'getFine',
   ],
   SYSTEM_ADMIN: [
-    'adminRequests', 'canSeed',
-    'addUser', 'getUser', 'manageUser', 'removeUser', 'getUsers',
-    'manageBook', 'addBook', 'removeBook',
-    'manageLimits',
-    'manageCategories',
-    'manageFines',
-    'addRequest', 'removeRequest', 'getRequets', 'manageRequest', 'getRequest',
-    'getQueue', 'addQueue', 'removeQueue', 'getQueues', 'manageQueues',
-    'getBorrow', 'getBorrows', 'manageBorrow', 'addBorrow', 'removeBorrow'
+    'canSeed',
+    'manageUsers', 'manageBooks', 'manageSemesters', 'manageLevels',
+    'manageRequests', 'manageQueues', 'manageBorrows',
   ],
 };
 
