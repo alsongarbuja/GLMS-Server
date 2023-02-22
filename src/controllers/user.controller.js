@@ -3,7 +3,7 @@ const pick = require('../utils/pick');
 const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
 const { userService } = require('../services');
-const { Request, User } = require('../models');
+const { Request, User, Queue, Borrow } = require('../models');
 
 const createUser = catchAsync(async (req, res) => {
   const user = await userService.createUser(req.body);
@@ -39,13 +39,14 @@ const getMyBooks = catchAsync(async (req, res) => {
   const userId = req.params.userId;
   const user = await User.findById(userId)
 
-  const requests = await Request.find({})
-  const requestedBook = await requests.filter(r => r.user.userId==user._id)
+  const borrowed = await Borrow.find({ userId: user._id }).populate('bookId')
+  const requests = await Request.find({ userId: user._id }).populate('bookId')
+  const queues = await Queue.find({ userId: user._id }).populate('bookId')
 
   const books = {
-    borrowed: user.borrowed_books,
-    requested: requestedBook,
-    queues: user.in_queue,
+    borrowed: borrowed,
+    requested: requests,
+    queues: queues,
   }
 
   res.status(httpStatus.OK).send(books)

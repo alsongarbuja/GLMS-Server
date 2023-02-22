@@ -1,16 +1,16 @@
 const httpStatus = require('http-status');
-const { Request, Book, User } = require('../models');
+const { Request } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 const getRequestbyId = async (id) => {
-    return Request.findById(id);
+    return Request.findById(id).populate(['bookId', 'userId']);
 }
 const createRequest = async (requestBody) => {
     return Request.create(requestBody);
 };
 
 const getRequests = async () => {
-    const requests = await Request.find({ status: { $ne: 'cancelled' } }).sort({ createdAt: -1 });
+    const requests = await Request.find({ status: { $ne: 'cancelled' } }).populate(['bookId', 'userId']).sort({ createdAt: -1 });
     return requests;
 };
 
@@ -22,44 +22,6 @@ const updateRequest = async(requestId, updatedBody) => {
     Object.assign(request, updatedBody);
     await request.save();
 
-    if(updatedBody.status==='cancelled'){
-      const book = await Book.findById(updatedBody.book.bookId)
-      if(!book){
-        throw new ApiError(httpStatus.NOT_FOUND, 'Book not found');
-      }
-      const user = await User.findById(updatedBody.user.userId)
-      if(!user){
-        throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
-      }
-
-      const indexOfCancelledUser = await book.in_queue.filter((iqq, i) => {
-        if(iqq.userId==user._id){
-          return i;
-        }
-      })
-
-      if(indexOfCancelledUser[0]+1==book.in_queue.length){
-        book.in_queue = await book.in_queue.filter(iq => {
-          if(iq.userId!=user._id){
-            return iq;
-          }
-          return;
-        })
-      }else{
-        book.in_queue = await book.in_queue.filter(iq => {
-          if(iq.userId!=user._id&&iq.queue_ticket_number!==0){
-            iq.queue_ticket_number -= 1
-            return iq;
-          }
-          if(iq.userId!=user._id&&iq.queue_ticket_number===0) return iq;
-
-          return;
-        })
-      }
-
-
-      await book.save();
-    }
     return request;
 };
 

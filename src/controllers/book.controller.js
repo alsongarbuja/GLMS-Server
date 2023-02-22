@@ -2,7 +2,7 @@ const httpStatus = require('http-status');
 const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
 const { bookService } = require('../services');
-const { User, Request, Limit } = require('../models');
+const { User, Request, Borrow, Queue, Semester } = require('../models');
 
 const createBook = catchAsync(async (req, res) => {
     const book = await bookService.createBook(req.body);
@@ -48,7 +48,7 @@ const checkBook = catchAsync(async (req, res) => {
     message: '',
   }
 
-  const userBorrowed = await user.borrowed_books.filter(bb => bb.bookId==book._id)
+  const userBorrowed = await Borrow.find({ userId: user._id, bookId: book._id }).populate('bookId')
 
   if(userBorrowed.length>0){
     canRequestOrQueue = {
@@ -57,7 +57,7 @@ const checkBook = catchAsync(async (req, res) => {
     }
   }
 
-  const userQueue = await user.in_queue.filter(iq => iq.bookId==book._id)
+  const userQueue = await Queue.find({ userId: user._id, bookId: book._id })
   if(userQueue.length>0){
     canRequestOrQueue = {
       check: false,
@@ -65,8 +65,7 @@ const checkBook = catchAsync(async (req, res) => {
     }
   }
 
-  let userRequest = await Request.find({})
-  userRequest = userRequest.filter(r => (r.book.bookId==book._id)&&(r.user.userId==user._id))
+  let userRequest = await Request.find({ userId: user._id, bookId: book._id })
   if(userRequest.length>0){
     canRequestOrQueue = {
       check: false,
@@ -74,16 +73,15 @@ const checkBook = catchAsync(async (req, res) => {
     }
   }
 
-  const limit = await Limit.find({ level: user.level })
-
-  if(!limit){
-    throw new ApiError(httpStatus.NOT_FOUND, 'Limit not found')
+  const semester = await Semester.findById(user.semester).populate('level')
+  if(!semester){
+    throw new ApiError(httpStatus.NOT_FOUND, 'Semester not found')
   }
 
-  const userBorrowedType = user.borrowed_books.filter(bb => bb.bookType===book.type)
-  const checkLimit = limit[0].sub_quantity.filter(sq => sq.type===book.type)[0]
+  const checkLimit = semester.level.limit.filter(limit => limit.type === book.type)
+  const userBorrowedBooks = userBorrowed.filter(borrow => borrow.bookId.type === book.type)
 
-  if(checkLimit.quantity<=userBorrowedType.length){
+  if(checkLimit[0].quantity<=userBorrowedBooks.length){
     canRequestOrQueue = {
       check: false,
       message: `You have already borrowed books within limit`,

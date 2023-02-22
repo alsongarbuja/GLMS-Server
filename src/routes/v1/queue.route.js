@@ -7,12 +7,12 @@ const router = express.Router();
 
 router
     .route('/')
-    .post(auth('addQueue'), queueController.addQueue)
-    .get(auth('getQueues'), queueController.getQueues)
+    .post(auth('manageQueues'), queueController.addQueue)
+    .get(auth('manageQueues'), queueController.getQueues)
 
 router
     .route('/:bookId')
-    .delete(auth('removeQueue'), queueController.deleteQueues)
+    .delete(auth('manageQueues'), queueController.deleteQueues)
 
 router
   .route('/canVisit/:bookId/:userId')

@@ -9,11 +9,11 @@ const router = express.Router();
 router
   .route('/')
   .post(auth('addUser'), validate(userValidation.createUser), userController.createUser)
-  .get(auth('getUsers'), validate(userValidation.getUsers), userController.getUsers);
+  .get(auth('manageUsers'), validate(userValidation.getUsers), userController.getUsers);
 
 router
   .route('/update-semester')
-  .get(auth('manageUser'), userController.updateUserSem)
+  .get(auth('manageUsers'), userController.updateUserSem)
 
 router
   .route('/mybooks/:userId')

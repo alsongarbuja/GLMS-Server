@@ -7,11 +7,11 @@ const router = express.Router();
 
 router
     .route('/')
-    .post(auth('manageRequests'), validate(requestValidation.createRequest), requestController.createRequest)
-    .get(auth('getRequets'), requestController.getRequests)
+    .post(validate(requestValidation.createRequest), requestController.createRequest)
+    .get(requestController.getRequests)
 router
     .route('/:requestId')
-    .get(auth('getRequest'), validate(requestValidation.singleRequest), requestController.getRequest)
+    .get(validate(requestValidation.singleRequest), requestController.getRequest)
     .patch(auth('manageRequests'), validate(requestValidation.updateRequest), requestController.updateRequest)
     .delete(auth('manageRequests'), validate(requestValidation.singleRequest), requestController.deleteRequest)
 
