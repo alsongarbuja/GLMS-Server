@@ -5,7 +5,7 @@ const allRoles = {
     'getFine',
   ],
   SYSTEM_ADMIN: [
-    'canSeed',
+    'canSeed', 'adminRequests', 'getUser',
     'manageUsers', 'manageBooks', 'manageSemesters', 'manageLevels',
     'manageRequests', 'manageQueues', 'manageBorrows',
   ],
